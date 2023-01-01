@@ -6,8 +6,7 @@ import numpy as np
 from tensorflow.keras.applications.xception import preprocess_input
 from detect import *
 import os, shutil
-
-os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
+import json
 import base64
 from io import BytesIO
 from PIL import Image
@@ -15,9 +14,6 @@ IMG_SIZE = 299
 categories = ["ArtDecor","Hitech","Indochina","Industrial","Scandinavian" ]
 save_crop_images_directory = r"./runs/detect"
 model = tf.keras.models.load_model(r"./xception_model_2.h5")
-
-
-
 
 def save_crop_images(image):
     folder = save_crop_images_directory
@@ -31,7 +27,7 @@ def save_crop_images(image):
         except Exception as e:
             print('Failed to delete %s. Reason: %s' % (file_path, e))
     cv2.imwrite('./data/images/client_side_image.jpg', image)
-    run( **{'weights': 'yolov5s.pt', 'source': './data/images/client_side_image.jpg', 'conf_thres': 0.35, 'iou_thres': 0.45, 'max_det': 1000, 'device': '', 'view_img': False, 'save_txt': False, 'save_conf': False, 'save_crop': True, 'nosave': True, 'classes': None, 'agnostic_nms': False, 'augment': False, 'visualize': False, 'update': False, 'project': './runs/detect', 'name': 'exp', 'exist_ok': False, 'line_thickness': 3, 'hide_labels': False, 'hide_conf': False, 'half': False, 'dnn': False, 'vid_stride': 1})
+    run( **{'weights': 'yolov5s.pt', 'source': './data/images/client_side_image.jpg', 'data': './data/coco128.yaml', 'conf_thres': 0.35, 'iou_thres': 0.45, 'max_det': 1000, 'device': '', 'view_img': False, 'save_txt': False, 'save_conf': False, 'save_crop': True, 'nosave': True, 'classes': None, 'agnostic_nms': False, 'augment': False, 'visualize': False, 'update': False, 'project': './runs/detect', 'name': 'exp', 'exist_ok': False, 'line_thickness': 3, 'hide_labels': False, 'hide_conf': False, 'half': False, 'dnn': False, 'vid_stride': 1})
 
 def predict_crop_images():
     predict_data = {}
