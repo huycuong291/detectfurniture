@@ -60,4 +60,4 @@ jobs:
         with:
           app-name: 'FurnitureDetect'
           slot-name: 'Production'
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_0D2767B22E364A38B28E16AFA1999D48 }}
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_5181BE45C7C54682BC21F8209AB2A2CE }}
