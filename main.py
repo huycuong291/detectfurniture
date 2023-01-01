@@ -7,6 +7,7 @@ from tensorflow.keras.applications.xception import preprocess_input
 from detect import *
 import os, shutil
 
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = '2'
 import base64
 from io import BytesIO
 from PIL import Image
