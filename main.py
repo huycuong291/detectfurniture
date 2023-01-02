@@ -16,19 +16,7 @@ save_crop_images_directory = r"./runs/detect"
 model = tf.keras.models.load_model(r"./xception_model_2.h5")
 import torch
 
-def save_crop_images(image):
-    folder = save_crop_images_directory
-    for filename in os.listdir(folder):
-        file_path = os.path.join(folder, filename)
-        try:
-            if os.path.isfile(file_path) or os.path.islink(file_path):
-                os.unlink(file_path)
-            elif os.path.isdir(file_path):
-                shutil.rmtree(file_path)
-        except Exception as e:
-            print('Failed to delete %s. Reason: %s' % (file_path, e))
-    cv2.imwrite('./data/images/client_side_image.jpg', image)
-    
+def save_crop_images(image): 
     # Model
     model = torch.hub.load('ultralytics/yolov5', 'yolov5s')
     # Inference
@@ -43,11 +31,7 @@ def predict_crop_images(crops):
     predict_data = {}
     index = 0
     for img in crops:
-                w, h = 512, 512
-                data = np.zeros((h, w, 3), dtype=np.uint8)
-                data[0:256, 0:256] = [255, 0, 0] # red patch in upper left
                 crop_img = img["im"]
-
                 img_array = crop_img/255.0
                 img_array = cv2.resize(img_array, (IMG_SIZE, IMG_SIZE))
                 new_array = np.expand_dims(img_array, axis=0)
