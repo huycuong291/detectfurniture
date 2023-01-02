@@ -2,8 +2,8 @@ from flask import Flask, request,jsonify
 from flask_cors import CORS
 import os
 import uuid
-application = Flask(__name__)
-CORS(application)
+app = Flask(__name__)
+CORS(app)
 
 
 import base64
@@ -23,13 +23,13 @@ def save_evaluate_data(receive_data):
     #for style in os.listdir(save_dir):
     cv2.imwrite(save_dir+"/"+receive_data["style"]+"/"+str(uuid.uuid4())+".jpg", evaluate_img)
 
-@application.post("/detect")
+@app.post("/detect")
 def detect_upload_img():
     request_data = request.get_json()
     response =save_crop_images(readBase64(request_data['base64']))
     return response, 201
 
-@application.post("/evaluation")
+@app.post("/evaluation")
 def receive_evaluation_img():
     receive_data = request.get_json()
     save_evaluate_data(receive_data)
