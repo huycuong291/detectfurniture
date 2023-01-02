@@ -40,5 +40,3 @@ def receive_evaluation_img():
     save_evaluate_data(receive_data)
     response="Success"
     return response, 201
-
-app.run()
