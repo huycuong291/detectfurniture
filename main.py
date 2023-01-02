@@ -35,8 +35,8 @@ def predict_crop_images():
     for path in os.listdir(save_crop_images_directory):
         path2 = os.path.join(save_crop_images_directory, path)
         if os.listdir(path2)== []: return "ERROR"
-        for new_path in os.listdir(path2 + '\crops'):
-            path3 = os.path.join(path2 + '\crops', new_path)
+        for new_path in os.listdir(path2 + '/crops'):
+            path3 = os.path.join(path2 + '/crops', new_path)
             for img in os.listdir(path3):
                 crop_img = cv2.imread(os.path.join(path3, img), cv2.IMREAD_COLOR)
                 crop_img = cv2.cvtColor(crop_img, cv2.COLOR_BGR2RGB)
