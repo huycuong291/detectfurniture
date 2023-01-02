@@ -5,6 +5,7 @@ import uuid
 application = Flask(__name__)
 CORS(application)
 
+
 import base64
 import cv2
 import numpy as np
@@ -25,8 +26,7 @@ def save_evaluate_data(receive_data):
 @application.post("/detect")
 def detect_upload_img():
     request_data = request.get_json()
-    save_crop_images(readBase64(request_data['base64']))
-    response = predict_crop_images()
+    response =save_crop_images(readBase64(request_data['base64']))
     return response, 201
 
 @application.post("/evaluation")

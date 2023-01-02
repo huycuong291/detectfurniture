@@ -14,6 +14,7 @@ IMG_SIZE = 299
 categories = ["ArtDecor","Hitech","Indochina","Industrial","Scandinavian" ]
 save_crop_images_directory = r"./runs/detect"
 model = tf.keras.models.load_model(r"./xception_model_2.h5")
+import torch
 
 def save_crop_images(image):
     folder = save_crop_images_directory
@@ -27,19 +28,26 @@ def save_crop_images(image):
         except Exception as e:
             print('Failed to delete %s. Reason: %s' % (file_path, e))
     cv2.imwrite('./data/images/client_side_image.jpg', image)
-    run( **{'weights': 'yolov5s.pt', 'source': './data/images/client_side_image.jpg', 'data': './data/coco128.yaml', 'conf_thres': 0.35, 'iou_thres': 0.45, 'max_det': 1000, 'device': '', 'view_img': False, 'save_txt': False, 'save_conf': False, 'save_crop': True, 'nosave': True, 'classes': None, 'agnostic_nms': False, 'augment': False, 'visualize': False, 'update': False, 'project': './runs/detect', 'name': 'exp', 'exist_ok': False, 'line_thickness': 3, 'hide_labels': False, 'hide_conf': False, 'half': False, 'dnn': False, 'vid_stride': 1})
+    
+    # Model
+    model = torch.hub.load('ultralytics/yolov5', 'yolov5s')
+    # Inference
+    results = model(image)
+    crops = results.crop(save=True)
 
-def predict_crop_images():
+    predict_data = {} 
+    predict_data=predict_crop_images(crops)
+    return predict_data
+
+def predict_crop_images(crops):
     predict_data = {}
     index = 0
-    for path in os.listdir(save_crop_images_directory):
-        path2 = os.path.join(save_crop_images_directory, path)
-        if os.listdir(path2)== []: return "ERROR"
-        for new_path in os.listdir(path2 + '/crops'):
-            path3 = os.path.join(path2 + '/crops', new_path)
-            for img in os.listdir(path3):
-                crop_img = cv2.imread(os.path.join(path3, img), cv2.IMREAD_COLOR)
-                crop_img = cv2.cvtColor(crop_img, cv2.COLOR_BGR2RGB)
+    for img in crops:
+                w, h = 512, 512
+                data = np.zeros((h, w, 3), dtype=np.uint8)
+                data[0:256, 0:256] = [255, 0, 0] # red patch in upper left
+                crop_img = img["im"]
+
                 img_array = crop_img/255.0
                 img_array = cv2.resize(img_array, (IMG_SIZE, IMG_SIZE))
                 new_array = np.expand_dims(img_array, axis=0)
